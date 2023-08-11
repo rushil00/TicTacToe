@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+    <head><meta name="viewport" content="width=device-width, initial-scale=1"> 
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='stylesheets/index.css')}}" />
+        <title>TicTacToe-Rush</title>
+        <script
+            src="https://kit.fontawesome.com/3bfd3ce9e5.js"
+            crossorigin="anonymous"
+        ></script>
+
+    </head>
+    <body>
+       <main> 
+            <div class="grid">
+                <div class="turn">
+                    <i class="fa-solid fa-x turqoise"></i>
+                    <p>Placeholder</p>
+                </div>
+                <!--actions menu, for new round as well as reset round-->
+                <div class="menu" data-id="menu">
+                    <button class="menu-btn" data-id="menu-button">
+                        Actions
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </button>
+                    <div class="items hidden" data-id="menu-items">
+                        <button type="button" data-id="reset-btn">Reset</button>
+                        <button type="button" data-id="new-round-btn">New Round</button>
+                    </div>
+                </div>
+                <!--playing board-->
+                <div id=1 class="square shadow" data-id="square"></div>
+                <div id=2 class="square shadow" data-id="square"></div>
+                <div id=3 class="square shadow" data-id="square"></div>
+                <div id=4 class="square shadow" data-id="square"></div>
+                <div id=5 class="square shadow" data-id="square"></div>
+                <div id=6 class="square shadow" data-id="square"></div>
+                <div id=7 class="square shadow" data-id="square"></div>
+                <div id=8 class="square shadow" data-id="square"></div>
+                <div id=9 class="square shadow" data-id="square"></div>
+
+                <!--scoreboard-->
+                <div class="score">
+                    <p>Player 1</p>
+                    <span>0 Wins</span>
+                </div>
+                <div class="score">
+                    <span >Ties</span>
+                </div>
+                <div class="score">
+                    <p>Player 2</p>
+                    <span>0 wins</span>
+                </div>   
+            </div>
+        </main>
+        <!--modal that opens when the game ends-->
+            <div class="modal hidden" data-id="modal">
+                <div class="modal-contents" data-id="model-contents">
+                    <p data-id="modal-text">Player 1 wins!</p>
+                    <button data-id="modal-button">Play Again</button>
+                </div>
+            </div>
+        
+    </body>
+    <script src="{{url_for('static',filename='js/app.js')}}"></script>
+</html> 
