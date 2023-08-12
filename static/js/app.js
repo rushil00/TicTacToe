@@ -15,7 +15,7 @@ const App= {
         squares: document.querySelectorAll('[data-id= "square"]'),
         modal: document.querySelector('[data-id="modal"]'),
         modalTxt: document.querySelector('[data-id="modal-text"]'),
-        modalBtn: document.querySelector('[data-id="modal-button"]'),
+        modalBtn: document.querySelector('[data-id="modal-btn"]'),
     },
     state: {  
         moves: [], 
@@ -69,6 +69,10 @@ const App= {
             console.log('Start New Round!');
         });
         //TODO
+        /*App.$.modalBtn.addEventListener('click', (event) =>{
+            App.state.moves = [];
+            App.$.modal.classList.add('hidden');
+        })*/
         //now we have to hook a click listener on each of the squares
         App.$.squares.forEach(square=> {
             square.addEventListener('click', event=>{
@@ -85,8 +89,9 @@ const App= {
                 }
                 //get current player, add the icon to the div.
                 const lastMove = App.state.moves.at(-1);
-                getOppositePlayer = (playerId)=> (playerId === 1? 2:1); 
-                const currentPlayer= App.state.moves.length === 0?1:getOppositePlayer(lastMove.playerId);
+                const getOppositePlayer = (playerId)=> (playerId === 1 ? 2 : 1); 
+                //determine which player icon to add to the square   
+                const currentPlayer= App.state.moves.length === 0 ? 1 : getOppositePlayer(lastMove.playerId);
                 const icon = document.createElement('i');
                 if (currentPlayer === 1){
                     icon.classList.add('fa-solid', 'fa-x','yellow'); 
@@ -98,7 +103,7 @@ const App= {
                     squareId: +square.id, 
                     playerId: currentPlayer,
                 });
-                //App.state.currentPlayer= currentPlayer=== 1?2:1;
+                //App.state.currentPlayer= currentPlayer=== 1 ? 2 : 1;
                 //console.log(App.state);
                 square.replaceChildren(icon);
                 /*const icon = document.createElement('i')
@@ -112,21 +117,24 @@ const App= {
                 
                 
                 //check if there is a winner or a tie game
-                const status = App.getGameStatus(App.state.moves);
+                const game = App.getGameStatus(App.state.moves);
                  
-                //console.log(status);
-                if(status.status === 'complete'){
+                //console.log(game);
+                if(game.status === 'complete'){
+                    let message ="";
                     App.$.modal.classList.remove("hidden");
-                    if(status.winner){
-                        const message = `Player ${status.winner} wins!`
+                    
+                    if(game.winner){
+                        message = `Player ${game.winner} wins!`;
                         //alert(`Player ${status.winner} wins!`);
                     }
                     else {
-                        const message = `Tie game!`
+                        message = `Tie game!`;
                         //alert("tie!");
                     }
                     App.$.modalTxt.textContent = message;
                 }
+                console.log(game);
             });
         });
     },
