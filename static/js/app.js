@@ -69,10 +69,7 @@ const App= {
             console.log('Start New Round!');
         });
         //TODO
-        /*App.$.modalBtn.addEventListener('click', (event) =>{
-            App.state.moves = [];
-            App.$.modal.classList.add('hidden');
-        })*/
+
         //now we have to hook a click listener on each of the squares
         App.$.squares.forEach(square=> {
             square.addEventListener('click', event=>{
@@ -136,6 +133,11 @@ const App= {
                 }
                 console.log(game);
             });
+        });
+        App.$.modalBtn.addEventListener('click', (event) =>{
+            App.state.moves = [];
+            App.$.squares.forEach(square => square.replaceChildren());
+            App.$.modal.classList.add('hidden');
         });
     },
 };
