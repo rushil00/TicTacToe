@@ -4,9 +4,12 @@ menu.addEventListener("click", (event) => {
     menuItems.classList.toggle('hidden');
 })*/
 
-//more efficient and BEST practice to write a JavaScript code! 
+import View from './view.js';
+import Store from './store.js';
 
-const App= {
+//more efficient and BEST practice to write a JavaScript code! 
+//represents controller in MVC pattern
+/*const App= {
     $: {
         menu: document.querySelector('[data-id = "menu"]'),
         menuItems: document.querySelector('[data-id = "menu-items"]'),
@@ -16,6 +19,7 @@ const App= {
         modal: document.querySelector('[data-id="modal"]'),
         modalTxt: document.querySelector('[data-id="modal-text"]'),
         modalBtn: document.querySelector('[data-id="modal-btn"]'),
+        turn: document.querySelector('[data-id="turn"]')
     },
     state: {  
         moves: [], 
@@ -64,7 +68,7 @@ const App= {
         App.$.resetbtn.addEventListener('click',event=>{
             console.log('Reset the Game!');
         });
-        //TODO
+        //TODO  
         App.$.newroundbtn.addEventListener('click', event=>{
             console.log('Start New Round!');
         });
@@ -89,41 +93,41 @@ const App= {
                 const getOppositePlayer = (playerId)=> (playerId === 1 ? 2 : 1); 
                 //determine which player icon to add to the square   
                 const currentPlayer= App.state.moves.length === 0 ? 1 : getOppositePlayer(lastMove.playerId);
-                const icon = document.createElement('i');
+                
+                const nextPlayer = getOppositePlayer(currentPlayer);
+                const turnIcon = document.createElement("i");
+                const squareIcon =document.querySelector('i');
+                const turnLabel = document.createElement("p");
+                turnLabel.innerText = `Player ${nextPlayer}, you're up!`;
+                
                 if (currentPlayer === 1){
-                    icon.classList.add('fa-solid', 'fa-x','yellow'); 
+                    turnIcon.classList.add('fa-solid', 'fa-x','yellow'); 
+                    squareIcon.classList.add('fa-solid', 'fa-o','turqoise'); 
+                    turnLabel.classList = 'turqoise';
                 }
                 else {
-                    icon.classList.add('fa-solid', 'fa-o','turqoise');
+                    turnIcon.classList.add('fa-solid', 'fa-o','turqoise');
+                    squareIcon.classList.add('fa-solid', 'fa-x','yellow');
+                    turnLabel.classList = 'yellow';
                 }
+                App.$.turn.replaceChildren(turnIcon ,turnLabel);
                 App.state.moves.push({
                     squareId: +square.id, 
                     playerId: currentPlayer,
                 });
-                //App.state.currentPlayer= currentPlayer=== 1 ? 2 : 1;
-                //console.log(App.state);
-                square.replaceChildren(icon);
-                /*const icon = document.createElement('i')
-                icon.classList.add('fa-solid', 'fa-x','yellow')
 
-                event.target.replaceChildren(icon);*/
+                square.replaceChildren(squareIcon);
 
-                //<i class="fa-solid fa-x yellow"></i>
-                //<i class="fa-solid fa-o turqoise"></i>
-                //note: event.target will always represent what is "clicked" and this is not the behavior that we want in this case. So we choose a different route.
-                
                 
                 //check if there is a winner or a tie game
                 const game = App.getGameStatus(App.state.moves);
                  
-                //console.log(game);
                 if(game.status === 'complete'){
                     let message ="";
                     App.$.modal.classList.remove("hidden");
                     
                     if(game.winner){
                         message = `Player ${game.winner} wins!`;
-                        //alert(`Player ${status.winner} wins!`);
                     }
                     else {
                         message = `Tie game!`;
@@ -143,3 +147,66 @@ const App= {
 };
 
 window.addEventListener("load", App.init);
+*/
+
+
+const players = [
+    {
+        id: 1,
+        name: "Player 1",
+        iconClass: "fa-x",
+        colorClass: "turqoise",
+    },
+    {
+        id: 2,
+        name: "Player 2",
+        iconClass: "fa-o",
+        colorClass: "yellow",
+    }
+];
+
+
+function init() {
+    const view = new View();
+    const store = new Store(players);
+
+    console.log(store.game);    
+
+    view.bindGameResetEvent(event => {
+        view.closeAll();
+
+        store.reset();
+        view.clearMoves();
+        view.setTurnIndicator(store.game.currentPlayer); 
+    });
+    view.bindNewRoundEvent(event => {
+        console.log('NewRoundEvent');
+        console.log(event);
+    });    
+    view.bindPlayerMoveEvent((square) => {
+        
+
+        const existingMove = store.game.moves.find(
+          (move) => move.squareId === +square.id
+        );
+    
+        if (existingMove) {
+          return;
+        }
+        view .handlePlayerMove(square, store.game.currentPlayer);
+        // Advance to the next state by pushing a move to the moves array
+        store.playerMove(+square.id);
+        view.setTurnIndicator(store.game.currentPlayer);
+
+        if(store.game.status.isComplete){
+            view.openModal(
+            store.game.status.winner? `${store.game.status.winner.name} Wins!`
+            : 'Tie');
+            return ;
+        }
+
+      });
+      
+    //console.log(view.$.turn);
+}
+window.addEventListener("load" , init);

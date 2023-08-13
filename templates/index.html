@@ -12,13 +12,13 @@
     <body>
        <main> 
             <div class="grid">
-                <div class="turn">
+                <div class="turn" data-id="turn">
                     <i class="fa-solid fa-x turqoise"></i>
-                    <p>Placeholder</p>
+                    <p class="turqoise">Placeholder</p>
                 </div>
                 <!--actions menu, for new round as well as reset round-->
                 <div class="menu" data-id="menu">
-                    <button class="menu-btn" data-id="menu-button">
+                    <button class="menu-btn" data-id="menu-btn">
                         Actions
                         <i class="fa-solid fa-chevron-down"></i>
                     </button>
@@ -61,5 +61,6 @@
             </div>
         
     </body>
-    <script src="{{url_for('static',filename='js/app.js')}}"></script>
+    <script src="{{url_for('static',filename='js/app.js')}}" type="module"></script>
+    <script src="{{url_for('static',filename='js/view.js')}}" type="module"></script>
 </html> 
